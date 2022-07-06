@@ -25,7 +25,7 @@ Hey I'm [Mercer@Zhihu](https://www.zhihu.com/people/daleige).
   
 ## 利率数据（`rates-watch`）
 - [Interest Rate Statistics](https://home.treasury.gov/policy-issues/financing-the-government/interest-rate-statistics)：官方的利率曲线数据，包含名义国债收益率曲线，真实收益率（五年以上），国库券利率等，见专栏文章[【数据拾遗：美债官方利率数据】](https://www.zhihu.com/column/c_1509153964662263808)
-- [NY Fed Repo Reference Rates](https://www.newyorkfed.org/markets/data-hub)：纽约联储发布的回购利率指数，详见
+- [NY Fed Repo Reference Rates](https://www.newyorkfed.org/markets/data-hub)：纽约联储发布的回购利率指数，详见[【漫谈缩表：美国的回购市场】](https://zhuanlan.zhihu.com/p/463721684)
 
 ## 大宗商品与期货数据（`futures-watch`）
 
