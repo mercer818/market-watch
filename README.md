@@ -14,6 +14,7 @@ Hey I'm [Mercer@Zhihu](https://www.zhihu.com/people/daleige).
   - H.15：利率
   - G.19：消费者信贷，见专栏文章[【数据拾遗：消费者信贷】](https://zhuanlan.zhihu.com/p/526754098)
 - Federael Reserve Board Flow of Funds：美国经济参与者们资产负债表的全貌
+  - [美国国债持仓数据](https://github.com/mercer818/market-watch/blob/master/market_watch/macro_watch/FoF.py)
 - NY Fed：纽约联储数据库主要包含各类利率数据、资产负债表SOMA数据、公开市场操作数据、以及Primary Dealers数据
 - FRED：圣路易斯联储的数据库，以Python库[`fredapi`](https://github.com/mortada/fredapi)为基础，主要作为搭建其他数据库与分析的快捷通道
   
