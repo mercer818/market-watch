@@ -175,4 +175,10 @@ class USTreasuries(GenericFoF):
         return parsed_dict
 
 
+if __name__ == '__main__':
+
+    fof_treasury = USTreasuries()
+    fof_treasury.get_treasury_holdings()
+
+
 

@@ -10,8 +10,10 @@
 # Imports
 # ---------------------------------------------------------------------------
 
+import os
 import pandas as pd
-from tqdm.notebook import tqdm
+from tqdm import tqdm
+from pathlib import Path
 
 
 # Fetch data for a particular year
@@ -73,11 +75,20 @@ def get_yc_from_treasury(curve_type, years: list):
 
 if __name__ == "__main__":
 
+    root_dir = Path(os.getcwd())
+    if not os.path.exists(root_dir/'cache'):
+        os.mkdir(root_dir/'cache')
+    if not os.path.exists(root_dir/'cache'/'Rates'):
+        os.mkdir(root_dir/'cache'/'Rates')
+
     us_bill_rates = get_yc_from_treasury('daily_treasury_bill_rates',
                                          [y for y in range(1990, 2023)])
+    us_bill_rates.to_csv(root_dir / 'cache' / 'Rates' / "daily_treasury_bill_rates.csv")
 
     us_nom_yields = get_yc_from_treasury('daily_treasury_yield_curve',
                                          [y for y in range(1990, 2023)])
+    us_nom_yields.to_csv(root_dir / 'cache' / 'Rates' / "daily_treasury_yield_curve.csv")
 
     us_real_yields = get_yc_from_treasury('daily_treasury_real_yield_curve',
                                           [y for y in range(1990, 2023)])
+    us_nom_yields.to_csv(root_dir / 'cache' / 'Rates' / "daily_treasury_real_yield_curve.csv")
