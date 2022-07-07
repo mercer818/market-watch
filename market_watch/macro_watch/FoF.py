@@ -18,6 +18,7 @@ import numpy as np
 
 import requests as req
 from io import StringIO
+from pathlib import Path
 
 
 class GenericFoF:
@@ -69,6 +70,14 @@ class GenericFoF:
 
         return data
 
+    def cache_data(self):
+        root_dir = Path(os.getcwd())
+        if not os.path.exists(root_dir/'cache'):
+            os.mkdir(root_dir/'cache')
+        if not os.path.exists(root_dir/'cache'/'FoF'):
+            os.mkdir(root_dir/'cache'/'FoF')
+        self.data.to_csv(root_dir/'cache'/'FoF'/f"{self.series_id}.csv")
+
 
 class USTreasuries(GenericFoF):
 
@@ -76,6 +85,7 @@ class USTreasuries(GenericFoF):
 
         super().__init__('8bfa7e966f36b2bfd04b129267d1fe75')
         self.clean_data()
+        self.cache_data()
 
     def clean_data(self):
         self.data = (
@@ -118,8 +128,11 @@ class USTreasuries(GenericFoF):
             .query(f"asset_or_liability in ('asset', 'asset_(market_value)')")
             .groupby(['date', 'participant']).value.sum()
             .apply(lambda x: x / 1e3)  # transform data from Millions to Billions
-            .unstack()
+            .unstack().resample('Q').last()
         )
+
+        filepath = Path(os.getcwd())/'cache'/'FoF'/f'{self.series_id}_treasury_holdings.csv'
+        level_by_holder.to_csv(filepath)
 
         return level_by_holder
 
