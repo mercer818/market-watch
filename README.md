@@ -32,3 +32,9 @@ Hey I'm [Mercer@Zhihu](https://www.zhihu.com/people/daleige).
 ### 大宗商品与期货数据（`futures-watch`）
 
 - [CFTC](https://www.cftc.gov/MarketReports/index.htm)
+
+### [World Bank Data](https://data.worldbank.org/)
+- [World Development Indicators](https://datatopics.worldbank.org/world-development-indicators/)
+- [Debt Statistics](https://www.worldbank.org/en/programs/debt-statistics/statistics)
+- [DataBank](https://databank.worldbank.org/home.aspx)
+- [API](https://datahelpdesk.worldbank.org/knowledgebase/articles/898581-api-basic-call-structure)
