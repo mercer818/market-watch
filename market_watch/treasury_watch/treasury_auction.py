@@ -20,113 +20,146 @@ import pandas as pd
 from tqdm import tqdm
 
 
-def parse_data(url):
-    page = req.get(url)
-    soup = bs(page.content, "xml")
-    auction_data = soup.contents[0]
+class TreasuryAuction:
 
-    # parse information of auction results
-    results = auction_data.find('AuctionResults')
-    results_data_dict = {tag.name: tag.text for tag in results.find_all()}
+    def __init__(self, cache_dir, start_date = "2008-1-1"):
 
-    # parse information of auction announcement/meta
-    announcement = auction_data.find('AuctionAnnouncement')
-    ann_data_dict = {tag.name: tag.text for tag in announcement.find_all()}
+        self.cache_dir = cache_dir
+        self.update_cache = False
+        self.has_cache = False
+        self.start_date = pd.to_datetime(start_date)  # enforce the format of start_date
+        self.end_date = pd.to_datetime(datetime.date.today())
+        self.dates = [dt.strftime('%Y%m%d') for dt in pd.date_range(self.start_date, self.end_date, freq='B')]
 
-    cusip = ann_data_dict['CUSIP']
+        # the file names used to save cache files
+        self.filename_result = f"auction_results_{self.dates[0]}_{self.dates[-1]}.csv"
+        self.filename_ann = f"auction_announcements_{self.dates[0]}_{self.dates[-1]}.csv"
 
-    results_df = pd.DataFrame(data=results_data_dict, index=[cusip])
-    announcement_df = pd.DataFrame(data=ann_data_dict, index=[cusip])
+        # cache information placeholders
+        self.cache_start_date = None
+        self.cache_end_date = None
+        self.cache_start_date_str = None
+        self.cache_end_date_str = None
+        self.residual_cache_dates = None
+        self.residual_cache_dates_str = None
+        self.result_old_cache_path = None
+        self.ann_old_cache_path = None
 
-    return results_df, announcement_df
+        self.get_cache_meta()
 
+    def get_cache_meta(self):
 
-def get_result_url(date, num):
-    return f'https://www.treasurydirect.gov/xml/R_{date}_{num}.xml'
+        """
+        Search for any existing cache file and use the filename to determine the start and end dates of cache.
+        """
 
+        # if there is no existing cache, directly move to download new cache, otherwise, append to existing cache
+        for f in os.listdir(self.cache_dir):
+            if 'auction_results' in f:
 
-def _get_data(cache_dates):
+                self.has_cache = True
 
-    """A helper function that returns the auction results and announcement for a given range of cache dates."""
+                # existing cache names
+                self.result_old_cache_path = self.cache_dir / f
+                self.ann_old_cache_path = self.cache_dir / f.replace("auction_results", "auction_announcements")
 
-    df_result_list = []
-    df_ann_list = []
-    for dt in tqdm(cache_dates, desc='Caching Treasury auctions data'):
-        ran_out = False
-        n = 1
-        while not ran_out:
-            try:
-                df_result, df_ann = parse_data(get_result_url(dt, n))
-                df_result['Date'] = dt
-                df_result_list.append(df_result)
-                df_ann_list.append(df_ann)
-                n += 1
-            except:
-                ran_out = True
+                cache_start_date_str = f.replace('.csv', '').split('_')[2]
+                cache_end_date_str = f.replace('.csv', '').split('_')[3]
 
-    result_cache_df = pd.concat(df_result_list)
-    ann_cache_df = pd.concat(df_ann_list)
+                self.cache_start_date = pd.to_datetime(cache_start_date_str, format='%Y%m%d')
+                self.cache_end_date = pd.to_datetime(cache_end_date_str, format='%Y%m%d')
 
-    return result_cache_df, ann_cache_df
+                # the cache dates are updated to the residual dates
+                if self.end_date > self.cache_end_date:
+                    self.residual_cache_dates = pd.date_range(self.cache_end_date, self.end_date, freq='B')
+                    self.residual_cache_dates_str = [dt.strftime('%Y%m%d') for dt in self.residual_cache_dates]
+                    self.update_cache = True
 
+    def get_auction_data(self, cache_dates):
 
-def get_data(cache_dir, start_date='2008-01-01'):
+        """A helper function that returns the auction results and announcement for a given range of cache dates."""
 
-    """
-    A wrapper of _get_data, with additional routines to identify the non-cached dates and only download necesary data.
+        df_result_list = []
+        df_ann_list = []
+        for dt in tqdm(cache_dates, desc='Caching Treasury auctions data'):
+            ran_out = False
+            n = 1
+            while not ran_out:
+                try:
+                    df_result, df_ann = self._parse_data(self._get_result_url(dt, n))
+                    df_result['Date'] = dt
+                    df_result_list.append(df_result)
+                    df_ann_list.append(df_ann)
+                    n += 1
+                except:
+                    ran_out = True
 
-    :param cache_dir: the directory of cache data
-    :param start_date: the starting date of cache.
-    :return: two dataframes of auction results and announcements.
-    """
+        result_cache_df = pd.concat(df_result_list)
+        ann_cache_df = pd.concat(df_ann_list)
 
-    start_date = pd.to_datetime(start_date).strftime("%Y-%m-%d") # enforce the format of start_date
-    end_date = datetime.date.today().strftime('%Y-%m-%d')
-    cache_dates = [dt.strftime('%Y%m%d') for dt in pd.date_range(start_date, end_date, freq='B')]
+        return result_cache_df, ann_cache_df
 
-    # the file names used to save cache files
-    result_filename = f"auction_results_{start_date.replace('-','')}_{end_date.replace('-','')}.csv"
-    ann_filename = f"auction_announcements_{start_date.replace('-', '')}_{end_date.replace('-', '')}.csv"
+    def cache_auction_data(self):
 
-    # if there is no existing cache, directly move to download new cache, otherwise, append to existing cache
-    has_cache = False
-    for f in os.listdir(cache_dir):
-        if 'auction_results' in f:
+        """
+        A wrapper of get_auction_data, with additional routines to hdndle cache.
+        """
 
-            # we will use the existing cache dates to determine the starting date of appending cache file
-            first_cache_dt = pd.to_datetime(f.replace('.csv', '').split('_')[2], format='%Y%m%d').strftime('%Y-%m-%d')
-            last_cache_dt = pd.to_datetime(f.replace('.csv', '').split('_')[3], format='%Y%m%d').strftime('%Y-%m-%d')
-            first_cache_dtstr = first_cache_dt.replace('-','')
-            last_cache_dtstr = last_cache_dt.replace('-','')
+        if not self.has_cache:
+            self.result_cache_df, self.ann_cache_df = self.get_auction_data(self.dates)
+        else:
+            if self.update_cache:
+                # read cache
+                result_cache_old = pd.read_csv(self.result_old_cache_path)
+                ann_cache_old = pd.read_csv(self.ann_old_cache_path)
 
-            # the cache dates are updated to the residual dates
-            cache_dates = [dt.strftime('%Y%m%d') for dt in pd.date_range(last_cache_dt, end_date, freq='B')]
+                # append new data
+                result_cache_new, ann_cache_new = self.get_auction_data(self.residual_cache_dates_str)
+                self.result_cache_df = pd.concat([result_cache_old, result_cache_new]).drop_duplicates()
+                self.ann_cache_df = pd.concat([ann_cache_old, ann_cache_new]).drop_duplicates()
 
-            # existing cache names
-            result_cache_name = cache_dir / f"auction_results_{first_cache_dtstr}_{last_cache_dtstr}.csv"
-            ann_cache_name = cache_dir / f"auction_results_{first_cache_dtstr}_{last_cache_dtstr}.csv"
-            has_cache = True
+                self.result_cache_df.to_csv(self.cache_dir / self.filename_result, index=False)
+                self.ann_cache_df.to_csv(self.cache_dir / self.filename_ann, index=False)
 
-    if not has_cache:
-        result_cache_df, ann_cache_df = _get_data(cache_dates)
-    else:
-        # read cache
-        result_cache_old = pd.read_csv(cache_dir / result_cache_name)
-        ann_cache_old = pd.read_csv(cache_dir / ann_cache_name)
+                self._clean_cache()
+            else:
+                self.result_cache_df = pd.read_csv(self.result_old_cache_path)
+                self.ann_cache_df = pd.read_csv(self.ann_old_cache_path)
 
-        # append new data
-        result_cache_new, ann_cache_new = _get_data(cache_dates)
-        result_cache_df = pd.concat([result_cache_old, result_cache_new]).drop_duplicates()
-        ann_cache_df = pd.concat([ann_cache_old, ann_cache_new]).drop_duplicates()
+    def _parse_data(self, url):
 
-        # remove cache files
-        os.remove(cache_dir / result_cache_name)
-        os.remove(cache_dir / ann_cache_name)
+        """
+        The primary method for parsing treasury auction information from XML files.
 
-    result_cache_df.to_csv(cache_dir / result_filename, index=False)
-    ann_cache_df.to_csv(cache_dir / ann_filename, index=False)
+        :param url: the link of the auction result/announcement XML file.
+        :return:
+        """
 
-    return result_cache_df, ann_cache_df
+        page = req.get(url)
+        soup = bs(page.content, "xml")
+        auction_data = soup.contents[0]
+
+        # parse information of auction results
+        results = auction_data.find('AuctionResults')
+        results_data_dict = {tag.name: tag.text for tag in results.find_all()}
+
+        # parse information of auction announcement/meta
+        announcement = auction_data.find('AuctionAnnouncement')
+        ann_data_dict = {tag.name: tag.text for tag in announcement.find_all()}
+
+        cusip = ann_data_dict['CUSIP']
+
+        results_df = pd.DataFrame(data=results_data_dict, index=[cusip])
+        announcement_df = pd.DataFrame(data=ann_data_dict, index=[cusip])
+
+        return results_df, announcement_df
+
+    def _get_result_url(self, date, num):
+        return f'https://www.treasurydirect.gov/xml/R_{date}_{num}.xml'
+
+    def _clean_cache(self):
+        os.remove(self.result_old_cache_path)
+        os.remove(self.ann_old_cache_path)
 
 
 if __name__ == "__main__":
@@ -135,6 +168,7 @@ if __name__ == "__main__":
     if not os.path.exists(root_dir/'cache'):
         os.mkdir(root_dir/'cache')
 
-    result_data, announcement_data = get_data(root_dir/'cache')
+    auction_loader = TreasuryAuction(root_dir/'cache', '2008-1-1')
+    auction_loader.cache_auction_data()
 
 
