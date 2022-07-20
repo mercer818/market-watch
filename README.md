@@ -9,14 +9,18 @@ Hey I'm [Mercer@Zhihu](https://www.zhihu.com/people/daleige).
 ### 宏观经济数据（`macro-watch`）
 - Federael Reserve Board Flow of Funds：美国经济参与者们资产负债表的全貌
 
-### 美联储数据 （`fed-watch`）
+### 美联储数据（`fed-watch`）
 - Federal Reserve Board Tables: 
   - H.4.1：M1货币供给渠道与央行资产负债表信息
   - H.6：广义货币供给
   - H.8：商业银行资产负债表
   - H.15：利率
   - G.19：消费者信贷，见专栏文章[【数据拾遗：消费者信贷】](https://zhuanlan.zhihu.com/p/526754098)
-- NY Fed：纽约联储数据库主要包含各类利率数据、资产负债表SOMA数据、公开市场操作数据、以及Primary Dealers数据
+- [NY Fed Database](https://www.newyorkfed.org/markets/data-hub)
+  - 各类短期利率
+  - 资产负债表SOMA数据
+  - 公开市场操作数据
+  - Primary Dealers 数据
 - FRED：圣路易斯联储的数据库，以Python库[`fredapi`](https://github.com/mortada/fredapi)为基础，主要作为搭建其他数据库与分析的快捷通道
   
 ### 美国财政部数据 (`treasury-watch`)
