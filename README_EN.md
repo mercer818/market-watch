@@ -11,15 +11,15 @@ Hey I'm [Mercer@Zhihu](https://www.zhihu.com/people/daleige).
 
 ### Monetary Policy（`fed-watch`）
 - Federal Reserve Board Tables: 
-  - [H.4.1: Factors Affecting Reserve Balances](https://www.federalreserve.gov/releases/h41/)
-  - [H.6: Money Stock Measures](https://www.federalreserve.gov/releases/h6/)
-  - [H.8: Assets and Liabilities of Commercial Banks in the United States](https://www.federalreserve.gov/releases/h8/)
-  - [H.15: Selected Interest Rates (Daily)](https://www.federalreserve.gov/releases/h15/)
-  - [G.19: Consumer Credit](https://www.federalreserve.gov/releases/g19/)
+  1) [H.4.1: Factors Affecting Reserve Balances](https://www.federalreserve.gov/releases/h41/)
+  2) [H.6: Money Stock Measures](https://www.federalreserve.gov/releases/h6/)
+  3) [H.8: Assets and Liabilities of Commercial Banks in the United States](https://www.federalreserve.gov/releases/h8/)
+  4) [H.15: Selected Interest Rates (Daily)](https://www.federalreserve.gov/releases/h15/)
+  5) [G.19: Consumer Credit](https://www.federalreserve.gov/releases/g19/)
 - [Federal Reserve Bank of New York Statistics](https://www.newyorkfed.org/markets/data-hub)
-  - [SOMA Holdings](https://www.newyorkfed.org/markets/soma-holdings)| [SOMA Visualization](https://www.newyorkfed.org/data-and-statistics/data-visualization/system-open-market-account-portfolio)
-  - [Open Market Operations]()
-  - [Primary Dealers Statistics](https://www.newyorkfed.org/markets/counterparties/primary-dealers-statistics)
+  1) [SOMA Holdings](https://www.newyorkfed.org/markets/soma-holdings)| [SOMA Visualization](https://www.newyorkfed.org/data-and-statistics/data-visualization/system-open-market-account-portfolio)
+  2) [Open Market Operations]()
+  3) [Primary Dealers Statistics](https://www.newyorkfed.org/markets/counterparties/primary-dealers-statistics)
 - [FRED](https://fred.stlouisfed.org/): an extension of existing API [`fredapi`](https://github.com/mortada/fredapi)
   
 ### Fiscal Policy (`treasury-watch`)
