@@ -17,7 +17,6 @@ Hey I'm [Mercer@Zhihu](https://www.zhihu.com/people/daleige).
   - [H.15: Selected Interest Rates (Daily)](https://www.federalreserve.gov/releases/h15/)
   - [G.19: Consumer Credit](https://www.federalreserve.gov/releases/g19/)
 - [Federal Reserve Bank of New York Statistics](https://www.newyorkfed.org/markets/data-hub)
-  - 
   - [SOMA Holdings](https://www.newyorkfed.org/markets/soma-holdings)| [SOMA Visualization](https://www.newyorkfed.org/data-and-statistics/data-visualization/system-open-market-account-portfolio)
   - [Open Market Operations]()
   - [Primary Dealers Statistics](https://www.newyorkfed.org/markets/counterparties/primary-dealers-statistics)
