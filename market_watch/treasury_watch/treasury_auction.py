@@ -106,8 +106,15 @@ class TreasuryAuction:
         """
 
         if not self.has_cache:
+            # download cache
             self.result_cache_df, self.ann_cache_df = self.get_auction_data(self.dates)
+
+            # save cache
+            self.result_cache_df.to_csv(self.cache_dir / self.filename_result, index=False)
+            self.ann_cache_df.to_csv(self.cache_dir / self.filename_ann, index=False)
+
         else:
+
             if self.update_cache:
                 # read cache
                 result_cache_old = pd.read_csv(self.result_old_cache_path)
@@ -118,10 +125,12 @@ class TreasuryAuction:
                 self.result_cache_df = pd.concat([result_cache_old, result_cache_new]).drop_duplicates()
                 self.ann_cache_df = pd.concat([ann_cache_old, ann_cache_new]).drop_duplicates()
 
+                # save cache
                 self.result_cache_df.to_csv(self.cache_dir / self.filename_result, index=False)
                 self.ann_cache_df.to_csv(self.cache_dir / self.filename_ann, index=False)
 
                 self._clean_cache()
+
             else:
                 self.result_cache_df = pd.read_csv(self.result_old_cache_path)
                 self.ann_cache_df = pd.read_csv(self.ann_old_cache_path)
