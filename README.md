@@ -7,7 +7,9 @@ Hey I'm [Mercer@Zhihu](https://www.zhihu.com/people/daleige).
 在项目的初始阶段，我会以搭建数据源与数据面板为主，并按类别分别搭建各自的模块：
 
 ### 宏观经济数据（`macro-watch`）
-- Federael Reserve Board Flow of Funds：美国经济参与者们资产负债表的全貌
+- [Bureau of Labor Statistics](https://www.bls.gov/bls/newsrels.htm#major)：就业、通胀等数据
+- [Bureau of Economic Analysis](https://www.bea.gov/data)：产出与居民收入核算(NIPA)
+- [Federael Reserve Board Flow of Funds](https://www.federalreserve.gov/releases/z1)：美国经济参与者们资产负债表的全貌
 
 ### 美联储数据（`fed-watch`）
 - Federal Reserve Board Tables: 
