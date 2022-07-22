@@ -134,17 +134,17 @@ class ZillowData:
 
     def cache_all_data(self, read_cache=True):
 
-        self.cache_ZHVI_neighborhood(self.ZHVI_BR1_ngh_url, 'ZHVI_BR1', 'ZHVI_BR1_ngh', read_cache)
-        self.cache_ZHVI_neighborhood(self.ZHVI_BR2_ngh_url, 'ZHVI_BR2', 'ZHVI_BR2_ngh', read_cache)
-        self.cache_ZHVI_neighborhood(self.ZHVI_BR3_ngh_url, 'ZHVI_BR3', 'ZHVI_BR3_ngh', read_cache)
-        self.cache_ZHVI_neighborhood(self.ZHVI_BR4_ngh_url, 'ZHVI_BR4', 'ZHVI_BR4_ngh', read_cache)
-        self.cache_ZHVI_neighborhood(self.ZHVI_BR5_ngh_url, 'ZHVI_BR5', 'ZHVI_BR5_ngh', read_cache)
+        self.cache_ZHVI_neighborhood(self.ZHVI_BR1_ngh_url, 'ZHVI_BR1', 'ZHVI_BR1', read_cache)
+        self.cache_ZHVI_neighborhood(self.ZHVI_BR2_ngh_url, 'ZHVI_BR2', 'ZHVI_BR2', read_cache)
+        self.cache_ZHVI_neighborhood(self.ZHVI_BR3_ngh_url, 'ZHVI_BR3', 'ZHVI_BR3', read_cache)
+        self.cache_ZHVI_neighborhood(self.ZHVI_BR4_ngh_url, 'ZHVI_BR4', 'ZHVI_BR4', read_cache)
+        self.cache_ZHVI_neighborhood(self.ZHVI_BR5_ngh_url, 'ZHVI_BR5', 'ZHVI_BR5', read_cache)
 
-        self.cache_ZHVI_ZIP(self.ZHVI_BR1_zip_url, 'ZHVI_BR1', 'ZHVI_BR1_zip', read_cache)
-        self.cache_ZHVI_ZIP(self.ZHVI_BR2_zip_url, 'ZHVI_BR2', 'ZHVI_BR2_zip', read_cache)
-        self.cache_ZHVI_ZIP(self.ZHVI_BR3_zip_url, 'ZHVI_BR3', 'ZHVI_BR3_zip', read_cache)
-        self.cache_ZHVI_ZIP(self.ZHVI_BR4_zip_url, 'ZHVI_BR4', 'ZHVI_BR4_zip', read_cache)
-        self.cache_ZHVI_ZIP(self.ZHVI_BR5_zip_url, 'ZHVI_BR5', 'ZHVI_BR5_zip', read_cache)
+        self.cache_ZHVI_ZIP(self.ZHVI_BR1_zip_url, 'ZHVI_BR1', 'ZHVI_BR1', read_cache)
+        self.cache_ZHVI_ZIP(self.ZHVI_BR2_zip_url, 'ZHVI_BR2', 'ZHVI_BR2', read_cache)
+        self.cache_ZHVI_ZIP(self.ZHVI_BR3_zip_url, 'ZHVI_BR3', 'ZHVI_BR3', read_cache)
+        self.cache_ZHVI_ZIP(self.ZHVI_BR4_zip_url, 'ZHVI_BR4', 'ZHVI_BR4', read_cache)
+        self.cache_ZHVI_ZIP(self.ZHVI_BR5_zip_url, 'ZHVI_BR5', 'ZHVI_BR5', read_cache)
 
         self.cache_ZORI_ZIP()
 
