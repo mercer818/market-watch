@@ -64,9 +64,9 @@ class ZillowData:
         self.ZHVI_BR5_zip_url = "https://files.zillowstatic.com/research/public_csvs/zhvi/"\
                                 "Zip_zhvi_bdrmcnt_5_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv?t=1658459810"
 
-    def cache_ZHVI_neighborhood(self, ZHVI_url, series_name, cache_name, read_cache=True):
+    def cache_ZHVI(self, ZHVI_url, series_name, granularity='zip', read_cache=True):
 
-        filename = self.cache_dir / f'{cache_name}_neighborhood.parquet'
+        filename = self.cache_dir / f'{series_name}_{granularity}.parquet'
 
         if not read_cache:
 
@@ -78,37 +78,14 @@ class ZillowData:
             )
 
             ZHVI_data.to_parquet(filename)
-            self.data_dict[series_name] = ZHVI_data
+            self.data_dict[f"{series_name}_{granularity}"] = ZHVI_data
 
         else:
             if os.path.exists(filename):
                 ZHVI_data = pd.read_parquet(filename)
-                self.data_dict[series_name] = ZHVI_data
+                self.data_dict[f"{series_name}_{granularity}"] = ZHVI_data
             else:
-                self.cache_ZHVI_neighborhood(ZHVI_url, series_name, cache_name, False)
-
-    def cache_ZHVI_ZIP(self, ZHVI_url, series_name, cache_name, read_cache=True):
-
-        filename = self.cache_dir / f'{cache_name}_ZIP.parquet'
-
-        if not read_cache:
-
-            ZHVI_data = (
-                pd.read_csv(ZHVI_url)
-                    .set_index(['RegionID', 'SizeRank', 'RegionName', 'RegionType',
-                                'StateName', 'State', 'City', 'Metro', 'CountyName'])
-                    .stack().reset_index().rename(columns={'level_9': 'Date', 0: series_name})
-            )
-
-            ZHVI_data.to_parquet(filename)
-            self.data_dict[series_name] = ZHVI_data
-
-        else:
-            if os.path.exists(filename):
-                ZHVI_data = pd.read_parquet(filename)
-                self.data_dict[series_name] = ZHVI_data
-            else:
-                self.cache_ZHVI_neighborhood(ZHVI_url, series_name, cache_name, False)
+                self.cache_ZHVI(ZHVI_url, series_name, granularity, False)
 
     def cache_ZORI_ZIP(self, read_cache=True):
 
@@ -134,17 +111,17 @@ class ZillowData:
 
     def cache_all_data(self, read_cache=True):
 
-        self.cache_ZHVI_neighborhood(self.ZHVI_BR1_ngh_url, 'ZHVI_BR1', 'ZHVI_BR1', read_cache)
-        self.cache_ZHVI_neighborhood(self.ZHVI_BR2_ngh_url, 'ZHVI_BR2', 'ZHVI_BR2', read_cache)
-        self.cache_ZHVI_neighborhood(self.ZHVI_BR3_ngh_url, 'ZHVI_BR3', 'ZHVI_BR3', read_cache)
-        self.cache_ZHVI_neighborhood(self.ZHVI_BR4_ngh_url, 'ZHVI_BR4', 'ZHVI_BR4', read_cache)
-        self.cache_ZHVI_neighborhood(self.ZHVI_BR5_ngh_url, 'ZHVI_BR5', 'ZHVI_BR5', read_cache)
+        self.cache_ZHVI(self.ZHVI_BR1_ngh_url, 'ZHVI_BR1', 'neighborhood', read_cache)
+        self.cache_ZHVI(self.ZHVI_BR2_ngh_url, 'ZHVI_BR2', 'neighborhood', read_cache)
+        self.cache_ZHVI(self.ZHVI_BR3_ngh_url, 'ZHVI_BR3', 'neighborhood', read_cache)
+        self.cache_ZHVI(self.ZHVI_BR4_ngh_url, 'ZHVI_BR4', 'neighborhood', read_cache)
+        self.cache_ZHVI(self.ZHVI_BR5_ngh_url, 'ZHVI_BR5', 'neighborhood', read_cache)
 
-        self.cache_ZHVI_ZIP(self.ZHVI_BR1_zip_url, 'ZHVI_BR1', 'ZHVI_BR1', read_cache)
-        self.cache_ZHVI_ZIP(self.ZHVI_BR2_zip_url, 'ZHVI_BR2', 'ZHVI_BR2', read_cache)
-        self.cache_ZHVI_ZIP(self.ZHVI_BR3_zip_url, 'ZHVI_BR3', 'ZHVI_BR3', read_cache)
-        self.cache_ZHVI_ZIP(self.ZHVI_BR4_zip_url, 'ZHVI_BR4', 'ZHVI_BR4', read_cache)
-        self.cache_ZHVI_ZIP(self.ZHVI_BR5_zip_url, 'ZHVI_BR5', 'ZHVI_BR5', read_cache)
+        self.cache_ZHVI(self.ZHVI_BR1_zip_url, 'ZHVI_BR1', 'zip', read_cache)
+        self.cache_ZHVI(self.ZHVI_BR2_zip_url, 'ZHVI_BR2', 'zip', read_cache)
+        self.cache_ZHVI(self.ZHVI_BR3_zip_url, 'ZHVI_BR3', 'zip', read_cache)
+        self.cache_ZHVI(self.ZHVI_BR4_zip_url, 'ZHVI_BR4', 'zip', read_cache)
+        self.cache_ZHVI(self.ZHVI_BR5_zip_url, 'ZHVI_BR5', 'zip', read_cache)
 
         self.cache_ZORI_ZIP()
 
